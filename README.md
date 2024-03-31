@@ -60,5 +60,17 @@ Or on a Unix/Linux system:
 directory = "/home/yourname/Pictures/Screenshots"
 ```
 
-### Usage
+3. **Understanding and Modifying the Code**
 
+- **Encoding Images:** The encode_image function reads an image file, encodes it in base64 format, and returns the encoded string. This is required for the API request.
+
+- **Renaming Logic:** The get_new_name function sends the encoded image to the GPT-4 Vision API and asks for a short description to use as a new filename. It handles the API response, extracting the description, and formats it as a valid filename.
+
+- **Renaming Files:** The rename_screenshots function looks for files in the specified directory that match a naming pattern (default is files starting with "Capture" and ending with '.png'). It then processes each file, calls get_new_name to get a new name, and renames the file.
+
+5. **Customization**
+
+**File Naming Convention:** If your screenshots have a different naming convention, modify the conditions in the rename_screenshots function accordingly.
+```python
+ if filename.startswith("Capture") and filename.endswith('.png'): # Ensure this matches your files
+```
