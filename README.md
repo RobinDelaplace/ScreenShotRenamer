@@ -68,7 +68,7 @@ directory = "/home/yourname/Pictures/Screenshots"
 
 - **Renaming Files:** The rename_screenshots function looks for files in the specified directory that match a naming pattern (default is files starting with "Capture" and ending with '.png'). It then processes each file, calls get_new_name to get a new name, and renames the file.
 
-5. **Customization**
+4. **Customization**
 
 **File Naming Convention:** If your screenshots have a different naming convention, modify the conditions in the rename_screenshots function accordingly.
 ```python
