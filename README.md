@@ -74,3 +74,18 @@ directory = "/home/yourname/Pictures/Screenshots"
 ```python
  if filename.startswith("Capture") and filename.endswith('.png'): # Ensure this matches your files
 ```
+## Native macOS Companion App
+
+A SwiftUI-based macOS application is included in the `ScreenShotRenamerApp` directory. It follows Apple's Liquid Glass design guidelines to offer a polished onboarding experience where you can:
+
+- Browse to the folder that contains your screenshots using the native folder picker.
+- Securely store your OpenAI API key with `AppStorage`.
+- Review or reset your selections from the app's Settings window.
+
+To open the project:
+
+1. Launch Xcode 15 or newer.
+2. Open `ScreenShotRenamerApp/ScreenShotRenamerApp.xcodeproj`.
+3. Update the signing team in the project settings, then build and run the app on macOS 13 or later.
+
+The app stores the chosen folder path locally and requests permission using security-scoped bookmarks so your automation script can safely access the files.
