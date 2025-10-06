@@ -1,20 +1,19 @@
-
 # ScreenshotRenamer
 
 ## Description
 
-This Python script automates the renaming of screenshot files within a specified directory using the GPT-4 Vision API. By analyzing the content of each image, the script generates a concise new filename, making file management more organized and meaningful.
+This Python script automates the renaming of screenshot files within a specified directory using OpenAI's GPT-4o mini vision-capable model. The tool now calls the Responses API, which offers lower per-screenshot pricing compared to the legacy Chat Completions workflow while still producing concise, descriptive filenames for quick organization.
 
 ## Getting Started
 
 ### Prerequisites
 
 - Python 3.x installed on your system.
-- An OpenAI API key.
+- An OpenAI API key with access to GPT-4o mini or another compatible Responses API model.
 
 ### Dependencies
 
-- requests library, which can be installed via pip:
+Install the single runtime dependency with pip:
 
 ```bash
 pip install requests
@@ -22,55 +21,55 @@ pip install requests
 
 ### Setup
 
-1. **Inserting Your API Key**
+1. **Insert Your API Key**
 
-The script requires an OpenAI API key to communicate with the GPT-4 Vision API. You'll find a placeholder in the script where you can insert your key:
+   Open `main.py` and replace the placeholder with your actual API key:
 
-```python
-api_key = "YOUR_OPENAI_API_KEY"  # Replace with your actual API key
-```
+   ```python
+   API_KEY = "YOUR_OPENAI_API_KEY"
+   ```
 
-- **Where to Find Your API Key:** Log in to your OpenAI account and navigate to the API section to find your key.
-- **How to Insert Your Key:** Replace `"YOUR_OPENAI_API_KEY"` with your actual key, ensuring it's within quotes. For example:
+   - Log in to your OpenAI account, create a key from the API dashboard, and keep it secret.
+   - Consider loading the key from an environment variable when running in production scripts.
 
-```python
-api_key = "sk-youractualapikeyhere"
-```
+2. **Point to Your Screenshot Folder**
 
-2. **Specifying the Directory**
+   Update the `DIRECTORY` constant so the script scans the correct location:
 
-You need to specify the directory where your screenshots are located. There's a line in the script for this purpose:
+   ```python
+   DIRECTORY = "Path_to_folder"
+   ```
 
-```python
-directory = "Path_to_folder"  # Folder where the screenshots are located
-```
+   - Use an absolute path for clarity, such as `"C:\\Users\\YourName\\Pictures\\Screenshots"` on Windows or `"/home/yourname/Pictures/Screenshots"` on Linux/macOS.
 
-- **Finding the Path:** This is the path to the folder on your computer or server where the screenshots you want to rename are stored.
-- **How to Insert the Path:** Replace `"Path_to_folder"` with the actual path to your directory. Use an absolute path for clarity.
+3. **Choose the Model and Token Limits**
 
-For example, on a Windows system:
+   The default configuration targets the cost-efficient `gpt-4o-mini` model and keeps generations brief:
 
-```python
-directory = "C:\Users\YourName\Pictures\Screenshots"
-```
+   ```python
+   MODEL_NAME = "gpt-4o-mini"
+   MAX_OUTPUT_TOKENS = 60
+   ```
 
-Or on a Unix/Linux system:
+   - Supply another Responses API vision model if you need different capabilities.
+   - Short prompts plus a small `MAX_OUTPUT_TOKENS` value help minimize token usage and cost per rename.
+   - You can adjust `MAX_OUTPUT_TOKENS` if you need longer filenames—just remember that higher limits may increase spend.
 
-```python
-directory = "/home/yourname/Pictures/Screenshots"
-```
+4. **Run the Script**
 
-3. **Understanding and Modifying the Code**
+   From the project directory, execute:
 
-- **Encoding Images:** The encode_image function reads an image file, encodes it in base64 format, and returns the encoded string. This is required for the API request.
+   ```bash
+   python main.py
+   ```
 
-- **Renaming Logic:** The get_new_name function sends the encoded image to the GPT-4 Vision API and asks for a short description to use as a new filename. It handles the API response, extracting the description, and formats it as a valid filename.
+   Every screenshot that begins with `Capture` and ends with `.png` will be renamed with a concise description returned by GPT-4o mini. Modify the logic in `rename_screenshots` if your screenshots follow a different naming pattern.
 
-- **Renaming Files:** The rename_screenshots function looks for files in the specified directory that match a naming pattern (default is files starting with "Capture" and ending with '.png'). It then processes each file, calls get_new_name to get a new name, and renames the file.
+## How It Works
 
-4. **Customization**
+1. Each screenshot is base64-encoded.
+2. The encoded image plus a short text prompt are sent to the Responses API (`https://api.openai.com/v1/responses`).
+3. GPT-4o mini responds with a five-word (or shorter) description.
+4. The script sanitizes the text and renames the file accordingly.
 
-**File Naming Convention:** If your screenshots have a different naming convention, modify the conditions in the rename_screenshots function accordingly.
-```python
- if filename.startswith("Capture") and filename.endswith('.png'): # Ensure this matches your files
-```
+With the switch to the Responses API, you keep image processing costs low while benefiting from GPT-4o mini's fast multimodal understanding.
